@@ -1,0 +1,3 @@
+algorithm/**/build/
+!.vscode/
+!.gitignore
