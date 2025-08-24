@@ -1,58 +1,80 @@
 #include <iostream>
 #include <vector>
 #include <string>
+
 using namespace std;
 
-// 构建 Next 数组（前缀表）
-vector<int> buildNext(const string &pattern) {
-    int n = pattern.size();
-    vector<int> next(n, 0);
-    int j = 0;               // 已匹配的前后缀长度
+class Solution {
+private:
+    vector<size_t> getNext(string &pattern)
+    {
+        if(pattern.empty()) return {};
 
-    for (int i = 1; i < n; i++) {
-        while (j > 0 && pattern[i] != pattern[j]) {
-            j = next[j - 1]; // 回退到之前的最长相等前后缀
+        vector<size_t> next(pattern.size(), 0);
+        size_t j = 0, i = 1;
+
+        for(; i < pattern.size(); i ++)
+        {
+            while(j > 0 && pattern[i] != pattern[j]) j = next[j - 1];
+            if(pattern[i] == pattern[j]) j ++;
+
+            next[i] = j;
         }
-        if (pattern[i] == pattern[j]) {
-            j++;
-        }
-        next[i] = j;
+
+        return next;
     }
-    return next;
-}
 
-// KMP 匹配
-vector<int> KMP(const string &text, const string &pattern) {
-    vector<int> next = buildNext(pattern);
-    vector<int> res;
-    int j = 0; // 模式串指针
+public:
+    // 算法思路：移动匹配：
+    //          将字符串与自身拼接，形成一个新的字符串
+    //          然后在新字符串去除首尾元素，可查找到原字符串 -> 该字符串可由子串重复构成
+    bool repeatedSubstringPattern(string s)
+    {
+        if (s.empty()) return false;
+        vector<size_t> next = getNext(s);
+        string ss = s + s;
 
-    for (int i = 0; i < (int)text.size(); i++) {
-        while (j > 0 && text[i] != pattern[j]) {
-            j = next[j - 1];
+        // 1. KMP 匹配搜索
+        size_t j = 0;
+        for(size_t i = 1; i < ss.size() - 1; i ++)
+        {
+            while(j > 0 && ss[i] != s[j]) j = next[j - 1];
+            if(ss[i] == s[j]) j ++;
+
+            if(j == s.size())
+            {
+                return true;
+            }
         }
-        if (text[i] == pattern[j]) {
-            j++;
-        }
-        if (j == (int)pattern.size()) {
-            res.push_back(i - j + 1); // 记录匹配起始位置
-            j = next[j - 1];          // 继续寻找下一个匹配
-        }
+
+        // 2. 库函数匹配搜索
+        ss.erase(ss.size() - 1);
+        if(ss.find(s, 1) != string::npos)
+            return true;
+            
+        return false;
     }
-    return res;
-}
+};
 
-int main() {
-    string text = "ababcabcacbab";
-    string pattern = "abcac";
+int main()
+{
+    Solution solut;
     
-    vector<int> positions = KMP(text, pattern);
-    if (!positions.empty()) {
-        cout << "Pattern found at positions: ";
-        for (int pos : positions) cout << pos << " ";
-        cout << endl;
-    } else {
-        cout << "Pattern not found." << endl;
+    // 测试用例
+    vector<string> testCases = {
+        "abab",     // true: "ab" + "ab"
+        "aba",      // false: 无法由重复子串组成
+        "abcabcabcabc", // true: "abc" + "abc" + "abc" + "abc"
+        "ababc",    // false: 无法由重复子串组成
+        "a",        // false: 单字符无法重复
+        "aa",       // true: "a" + "a"
+        "aaa"       // true: "a" + "a" + "a"
+    };
+    
+    for(const string& s : testCases) {
+        bool res = solut.repeatedSubstringPattern(s);
+        cout << "\"" << s << "\": " << (res ? "true" : "false") << endl;
     }
+    
     return 0;
 }
