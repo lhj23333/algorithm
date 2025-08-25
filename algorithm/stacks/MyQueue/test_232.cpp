@@ -8,8 +8,7 @@ private:
     stack<int> inStack;     // 输入栈
     stack<int> outStack;    // 输出栈
 
-    void transferInOut()
-    {
+    void transferInOut() {
         while(!inStack.empty())
         {
             outStack.push(inStack.top());
@@ -18,20 +17,15 @@ private:
     }
 
 public:
-    MyQueue()
-    {
-        
-    }
+    MyQueue() { }
 
     // 队列入队
-    void push(int x)
-    {
+    void push(int x) {
         inStack.push(x);
     }
 
     // 队列出队
-    int pop() 
-    {
+    int pop() {
         if(outStack.empty())
             transferInOut();
 
@@ -40,9 +34,8 @@ public:
         return ret;
     }
 
-    // 获取队列首元素，但出队
-    int peek()
-    {
+    // 获取队列首元素，不出队
+    int peek() {
         if(outStack.empty())
             transferInOut();
 
@@ -50,8 +43,7 @@ public:
     }
 
     // 队列是否为空
-    bool empty()
-    {
+    bool empty() {
         return inStack.empty() && outStack.empty();
     }
 };
