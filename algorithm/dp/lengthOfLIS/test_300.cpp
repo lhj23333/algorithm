@@ -19,7 +19,6 @@ private:
     //     }
     // }
 
-
     int process(vector<int> &nums) {
         int len = nums.size();
         int result = INT_MIN;

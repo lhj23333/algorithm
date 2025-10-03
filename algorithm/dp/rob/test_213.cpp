@@ -24,7 +24,6 @@ public:
 
         vector<int> nums1(nums.begin(), nums.end() - 1);
         vector<int> nums2(nums.begin() + 1, nums.end());
-
         return max(process(nums1), process(nums2));
     }
 };

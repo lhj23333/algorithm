@@ -30,6 +30,13 @@ private:
                     else dp[i][j] = dp[i - 1][j];
                 }
             }
+            cout << endl;
+            for(int i = 0; i <= s.size(); i ++) {
+                for(int j = 0; j <= t.size(); j ++) {
+                    cout << dp[i][j] << " ";
+                }
+                cout << endl;
+            }
             return dp[s.size()][t.size()];
         }
 

@@ -9,9 +9,9 @@ public:
         vector<int> dp(target + 1, 0);
         dp[0] = 1;
 
-        for(size_t i = 0; i <= target; i ++) {
-            for(size_t j = 0; j < nums.size(); j ++) {
-                if(i - nums[j] >= 0) {
+        for(int i = 0; i <= target; i ++) {
+            for(int j = 0; j < nums.size(); j ++) {
+                if(i - nums[j] >= 0 && dp[i] < INT_MAX - dp[i - nums[j]]) {
                     dp[i] += dp[i - nums[j]];
                 }
             }
@@ -47,6 +47,12 @@ int main() {
     vector<int> nums5 = {1, 1, 1};
     int target5 = 3;
     cout << "Test 5 - nums: [1,1,1], target: 3, result: " << solution.combinationSum4(nums5, target5) << endl;
+
+    vector<int> nums6 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+                         16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
+                         29, 30, 31};
+    int target6 = 32;
+    cout << "Test 6 - nums: {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31}, target: 32, result: " << solution.combinationSum4(nums6, target6) << endl;
     
     return 0;
 }
